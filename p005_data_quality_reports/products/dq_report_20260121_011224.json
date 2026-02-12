@@ -1,0 +1,14 @@
+{
+    "dataset": "products",
+    "file_used": "data_lake/raw/products/api\\2026\\01\\20\\products_20260120_021032.json",
+    "total_records": 30,
+    "validation_results": {
+        "missing_item_id": 0,
+        "missing_name": 0,
+        "missing_category": 0,
+        "invalid_price": 0,
+        "invalid_rating_avg": 0,
+        "invalid_popularity_score": 0
+    },
+    "generated_at": "2026-01-21 01:12:24"
+}

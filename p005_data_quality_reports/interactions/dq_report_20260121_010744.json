@@ -1,0 +1,21 @@
+{
+    "dataset": "interactions",
+    "file_used": "data_lake/raw/interactions/csv\\2026\\01\\20\\interactions_20260120_003938.csv",
+    "total_records": 1010,
+    "null_counts": {
+        "user_id": 0,
+        "item_id": 0,
+        "event_type": 0,
+        "rating": 754,
+        "timestamp": 0,
+        "device": 0,
+        "session_id": 0
+    },
+    "validation_results": {
+        "invalid_ratings": 18,
+        "invalid_events": 0,
+        "missing_user_or_item": 0,
+        "duplicate_rows": 10
+    },
+    "generated_at": "2026-01-21 01:07:44"
+}
