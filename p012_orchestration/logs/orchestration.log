@@ -1,0 +1,1091 @@
+2026-01-27 19:00:51,230 - INFO - Orchestration logging initialized
+2026-01-27 19:00:58,876 - INFO - Starting temporary server on http://127.0.0.1:8149
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2026-01-27 19:02:27,990 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/health "HTTP/1.1 200 OK"
+2026-01-27 19:02:30,901 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/admin/version "HTTP/1.1 200 OK"
+2026-01-27 19:02:31,833 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/csrf-token?client=7f92004d-210a-4767-ba56-136ba112ad86 "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:02:31,984 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/flows/ "HTTP/1.1 200 OK"
+2026-01-27 19:02:32,600 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/flow_runs/ "HTTP/1.1 201 Created"
+2026-01-27 19:02:33,702 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/flow_runs/7efb9678-2c6e-4088-9272-ca0f36f4f4e0/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:02:33,796 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/flow_runs/7efb9678-2c6e-4088-9272-ca0f36f4f4e0 "HTTP/1.1 200 OK"
+2026-01-27 19:02:33,858 - INFO - Beginning flow run 'russet-woodlouse' for flow 'RecoMart_End_to_End_Pipeline'
+2026-01-27 19:02:44,567 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p002_synthetic_data.generate_interactions
+2026-01-27 19:02:51,703 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/csrf-token?client=5b710487-f9c2-4c0e-bb6e-99dfb027fbd0 "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:02:52,017 - INFO - HTTP Request: GET http://127.0.0.1:8149/api/flows/f09b52af-1b35-463b-85e5-b1a4cc1c0f31 "HTTP/1.1 200 OK"
+2026-01-27 19:02:52,078 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:09,329 - INFO - [p002_synthetic_data.generate_interactions] STDOUT:
+Generated synthetic interaction file: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p002_synthetic_data\output\interactions_20260127_190308.csv
+Total rows: 20010
+
+2026-01-27 19:03:09,338 - INFO - Module p002_synthetic_data.generate_interactions completed successfully
+2026-01-27 19:03:09,394 - INFO - Finished in state Completed()
+2026-01-27 19:03:09,467 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p003_ingestion.ingest_interactions
+2026-01-27 19:03:10,125 - INFO - [p003_ingestion.ingest_interactions] STDOUT:
+SUCCESS: Ingested interactions_20260127_190308.csv to data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_190308.csv
+
+2026-01-27 19:03:10,136 - INFO - Module p003_ingestion.ingest_interactions completed successfully
+2026-01-27 19:03:10,173 - INFO - Finished in state Completed()
+2026-01-27 19:03:10,219 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p003_ingestion.ingest_products_api
+2026-01-27 19:03:11,657 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:14,033 - INFO - [p003_ingestion.ingest_products_api] STDOUT:
+
+=== PRODUCT API INGESTION STARTED ===
+Calling Product API: http://127.0.0.1:8000/products
+Fetched 200 product records from API
+SUCCESS: Ingested product data to data_lake/raw/products/api\2026\01\27\products_20260127_190313.json (records: 200)
+=== PRODUCT API INGESTION COMPLETED ===
+
+
+2026-01-27 19:03:14,040 - INFO - Module p003_ingestion.ingest_products_api completed successfully
+2026-01-27 19:03:14,061 - INFO - Finished in state Completed()
+2026-01-27 19:03:14,100 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p004_validation.profile_and_validate_interactions
+2026-01-27 19:03:15,729 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:23,927 - INFO - [p004_validation.profile_and_validate_interactions] STDOUT:
+
+Using latest raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_190308.csv
+
+--- DATA PROFILING (INTERACTIONS) ---
+Shape (rows, columns): (20010, 7)
+
+Null values per column:
+user_id           0
+item_id           0
+event_type        0
+rating        15123
+timestamp         0
+device            0
+session_id        0
+dtype: int64
+
+Unique users: 500
+Unique items: 200
+
+Event type distribution:
+event_type
+rating      5041
+view        5011
+click       4998
+purchase    4960
+Name: count, dtype: int64
+
+--- DATA VALIDATION (INTERACTIONS) ---
+invalid_ratings: 342
+invalid_events: 0
+missing_user_or_item: 0
+duplicate_rows: 10
+
+Data Quality Report saved at: p005_data_quality_reports/interactions\dq_report_20260127_190322.json
+
+Validation completed and report generated.
+
+2026-01-27 19:03:23,928 - INFO - Module p004_validation.profile_and_validate_interactions completed successfully
+2026-01-27 19:03:23,965 - INFO - Finished in state Completed()
+2026-01-27 19:03:24,085 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p004_validation.profile_and_validate_products
+2026-01-27 19:03:24,761 - INFO - [p004_validation.profile_and_validate_products] STDOUT:
+
+Using latest raw product file: data_lake/raw/products/api\2026\01\27\products_20260127_190313.json
+
+--- DATA PROFILING (PRODUCTS) ---
+Total records: 200
+Unique categories: {'Books', 'Electronics', 'Sports', 'Clothing', 'Home'}
+Unique brands: {'BrandD', 'BrandA', 'BrandC', 'BrandB'}
+Price range: 109.81 to 4978.99
+Rating Avg range: 1.0 to 4.97
+Popularity score range: 0.01 to 0.98
+
+--- DATA VALIDATION (PRODUCTS) ---
+missing_item_id: 0
+missing_name: 0
+missing_category: 0
+invalid_price: 0
+invalid_rating_avg: 0
+invalid_popularity_score: 0
+
+Product Data Quality Report saved at: p005_data_quality_reports/products\dq_report_20260127_190324.json
+
+Product validation completed and report generated.
+
+2026-01-27 19:03:24,762 - INFO - Module p004_validation.profile_and_validate_products completed successfully
+2026-01-27 19:03:24,783 - INFO - Finished in state Completed()
+2026-01-27 19:03:24,837 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p005_data_quality_reports.generate_dq_pdf
+2026-01-27 19:03:26,225 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:28,186 - INFO - [p005_data_quality_reports.generate_dq_pdf] STDOUT:
+Generating Data Quality PDF Report...
+Data Quality PDF generated successfully:
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p005_data_quality_reports\DQ_Report_20260127_190327.pdf
+
+2026-01-27 19:03:28,202 - INFO - Module p005_data_quality_reports.generate_dq_pdf completed successfully
+2026-01-27 19:03:28,222 - INFO - Finished in state Completed()
+2026-01-27 19:03:28,324 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p006_preparation.prepare_interactions
+2026-01-27 19:03:28,491 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:35,930 - INFO - [p006_preparation.prepare_interactions] STDOUT:
+
+=== INTERACTIONS DATA PREPARATION PIPELINE STARTED ===
+Using raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_190308.csv
+
+================ DATA PREPARATION : INTERACTIONS =================
+Initial shape: (20010, 7)
+Step 1: Removing duplicate records
+Duplicates removed: 10
+Step 2: Handling missing ratings (only rating events must have rating)
+Invalid rating records removed: 154
+Step 3: Validating rating range (1 to 5)
+Invalid rating values removed: 342
+Step 4: Converting timestamp to datetime format
+Final shape after cleaning: (19504, 7)
+================ DATA PREPARATION COMPLETED =================
+
+Prepared interactions file saved at: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_190333.csv
+Lineage logged for stage: prepare_interactions
+
+=== INTERACTIONS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:03:35,932 - INFO - Module p006_preparation.prepare_interactions completed successfully
+2026-01-27 19:03:35,939 - INFO - Finished in state Completed()
+2026-01-27 19:03:35,977 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p006_preparation.prepare_products
+2026-01-27 19:03:36,563 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:03:36,644 - INFO - [p006_preparation.prepare_products] STDOUT:
+
+=== PRODUCTS DATA PREPARATION PIPELINE STARTED ===
+Using latest raw file: data_lake/raw/products/api\2026\01\27\products_20260127_190313.json
+
+================ DATA PREPARATION : PRODUCTS =================
+Initial number of records: 200
+Invalid product records dropped: 0
+Final number of clean product records: 200
+================ DATA PREPARATION COMPLETED =================
+
+Prepared product dataset saved at: data_lake/prepared/products\2026\01\27\products_prepared_20260127_190336.json
+Lineage logged for stage: prepare_products
+
+=== PRODUCTS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:03:36,648 - INFO - Module p006_preparation.prepare_products completed successfully
+2026-01-27 19:03:36,704 - INFO - Finished in state Completed()
+2026-01-27 19:03:36,760 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p008_feature_engineering.build_features
+2026-01-27 19:03:38,623 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:04:19,687 - INFO - [p008_feature_engineering.build_features] STDOUT:
+
+=== FEATURE ENGINEERING PIPELINE STARTED ===
+Using prepared interactions: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_190333.csv
+Using prepared products: data_lake/prepared/products\2026\01\27\products_prepared_20260127_190336.json
+
+================ FEATURE ENGINEERING STARTED ================
+Step 1: Joining interactions with product metadata (on item_id)
+Total records after join: 19504
+
+Step 2: Creating User Activity Frequency feature
+
+Step 3: Creating Average Rating Per User feature
+
+Step 4: Creating Average Rating Per Item feature
+
+Step 5: Creating Session Co-occurrence feature
+
+Step 6: Creating Session Interaction Count feature
+
+Step 7: Creating Price Bucket feature
+
+Step 8: Creating Is-Rating-Event feature
+
+Step 9: Creating Normalized Popularity Score feature
+
+Step 10: Encoding categorical features
+
+Step 11: Normalizing numerical features
+
+================ FEATURE ENGINEERING COMPLETED ================
+
+Feature store dataset saved at: p009_feature_store/data\features_20260127_190413.csv
+Lineage logged for stage: build_features
+
+=== FEATURE ENGINEERING PIPELINE COMPLETED ===
+
+2026-01-27 19:04:19,718 - INFO - Module p008_feature_engineering.build_features completed successfully
+2026-01-27 19:04:19,990 - INFO - Finished in state Completed()
+2026-01-27 19:04:20,209 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p008_feature_engineering.load_features_to_db
+2026-01-27 19:04:21,697 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:05:01,045 - INFO - [p008_feature_engineering.load_features_to_db] STDOUT:
+
+=== LOADING FEATURE STORE DATA INTO DATABASE ===
+Latest feature store file detected: p009_feature_store/data\features_20260127_190413.csv
+
+Loading feature file into database: p009_feature_store/data\features_20260127_190413.csv
+Columns detected in CSV:
+['user_id', 'item_id', 'event_type', 'rating', 'timestamp', 'device', 'session_id', 'name', 'price', 'rating_avg', 'popularity_score', 'created_at', 'user_activity_frequency', 'avg_rating_per_user', 'avg_rating_per_item', 'session_unique_items', 'session_interaction_count', 'is_rating_event', 'popularity_score_norm', 'category_Books', 'category_Clothing', 'category_Electronics', 'category_Home', 'category_Sports', 'brand_BrandA', 'brand_BrandB', 'brand_BrandC', 'brand_BrandD', 'price_bucket_low', 'price_bucket_medium', 'price_bucket_high', 'price_bucket_premium', 'feature_created_at']
+Total rows to insert: 19504
+Table 'feature_store' checked/created successfully.
+500 rows inserted...
+1000 rows inserted...
+1500 rows inserted...
+2000 rows inserted...
+2500 rows inserted...
+3000 rows inserted...
+3500 rows inserted...
+4000 rows inserted...
+4500 rows inserted...
+5000 rows inserted...
+5500 rows inserted...
+6000 rows inserted...
+6500 rows inserted...
+7000 rows inserted...
+7500 rows inserted...
+8000 rows inserted...
+8500 rows inserted...
+9000 rows inserted...
+9500 rows inserted...
+10000 rows inserted...
+10500 rows inserted...
+11000 rows inserted...
+11500 rows inserted...
+12000 rows inserted...
+12500 rows inserted...
+13000 rows inserted...
+13500 rows inserted...
+14000 rows inserted...
+14500 rows inserted...
+15000 rows inserted...
+15500 rows inserted...
+16000 rows inserted...
+16500 rows inserted...
+17000 rows inserted...
+17500 rows inserted...
+18000 rows inserted...
+18500 rows inserted...
+19000 rows inserted...
+19500 rows inserted...
+
+Feature store updated successfully.
+Total rows inserted: 19504
+Lineage logged for stage: load_features_to_db
+
+=== FEATURE STORE LOAD COMPLETED ===
+
+2026-01-27 19:05:01,071 - INFO - Module p008_feature_engineering.load_features_to_db completed successfully
+2026-01-27 19:05:01,092 - INFO - Finished in state Completed()
+2026-01-27 19:05:01,154 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p011_model_training.train_model
+2026-01-27 19:05:01,929 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:07:00,732 - INFO - [p011_model_training.train_model] STDOUT:
+
+=== MODEL TRAINING PIPELINE STARTED ===
+
+Using feature file: p009_feature_store/data\features_20260127_190413.csv
+
+Checking missing values in feature columns:
+user_activity_frequency      0
+avg_rating_per_user          0
+avg_rating_per_item          0
+session_unique_items         0
+session_interaction_count    0
+is_rating_event              0
+popularity_score_norm        0
+dtype: int64
+
+Handling missing values: filling NaNs with 0
+
+Model Performance:
+Accuracy : 0.7503204306588054
+Precision: 0.0
+Recall   : 0.0
+
+MLflow Run ID: 3d31114856f546d0a532655c2bf1406b
+Lineage logged for stage: model_training
+
+=== MODEL TRAINING PIPELINE COMPLETED ===
+
+2026-01-27 19:07:00,787 - ERROR - [p011_model_training.train_model] STDERR:
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:05:35 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:05:36 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:05:36 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:05:36 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:05:36 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:05:38 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:05:38 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+2026/01/27 19:05:43 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+
+2026-01-27 19:07:00,801 - INFO - Module p011_model_training.train_model completed successfully
+2026-01-27 19:07:01,064 - INFO - Finished in state Completed()
+2026-01-27 19:07:01,268 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p011_model_training.train_svd_model
+2026-01-27 19:07:02,087 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:07:20,835 - INFO - [p011_model_training.train_svd_model] STDOUT:
+Locating latest interaction data...
+Using interaction data from: data_lake\prepared\interactions\2026\01\27\interactions_prepared_20260127_190333.csv
+Loading interaction data...
+Raw data preview:
+  user_id item_id event_type  ...                   timestamp  device session_id
+0   U0055   P0065       view  ...  2026-01-27 18:06:29.511651     web      S2594
+1   U0419   P0001   purchase  ...  2026-01-27 01:33:30.511651  mobile      S6810
+2   U0178   P0082       view  ...  2026-01-27 02:33:01.511651  mobile      S8243
+3   U0099   P0194     rating  ...  2026-01-26 22:02:29.511651     web      S6364
+4   U0494   P0047     rating  ...  2026-01-26 23:07:06.511651  mobile      S4815
+
+[5 rows x 7 columns]
+Total training rows after cleaning: 4544
+Training SVD model...
+Evaluating model...
+RMSE: 1.4327
+Precision@5: 0.1756
+Recall@5: 0.6006
+
+SVD model training completed successfully.
+RMSE: 1.4326771910929834
+Precision@5: 0.1756097560975616
+Recall@5: 0.600609756097561
+Model artifact and metrics logged in MLflow.
+PDF report generated at: reports\model_report_SVD_Run_20260127_190717.pdf
+Each MLflow run = one model version.
+
+2026-01-27 19:07:20,836 - ERROR - [p011_model_training.train_svd_model] STDERR:
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:07:14 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:07:17 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:07:17 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:07:17 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:07:17 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:07:17 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:07:17 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+
+2026-01-27 19:07:20,836 - INFO - Module p011_model_training.train_svd_model completed successfully
+2026-01-27 19:07:20,845 - INFO - Finished in state Completed()
+2026-01-27 19:07:21,610 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/flow_runs/7efb9678-2c6e-4088-9272-ca0f36f4f4e0/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:07:21,663 - INFO - Finished in state Completed()
+2026-01-27 19:07:21,838 - INFO - HTTP Request: POST http://127.0.0.1:8149/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:07:21,863 - INFO - Stopping temporary server on http://127.0.0.1:8149
+2026-01-27 19:13:25,394 - INFO - Orchestration logging initialized
+2026-01-27 19:13:30,946 - INFO - Starting temporary server on http://127.0.0.1:8054
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2026-01-27 19:13:44,307 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/health "HTTP/1.1 200 OK"
+2026-01-27 19:13:45,681 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/admin/version "HTTP/1.1 200 OK"
+2026-01-27 19:13:45,732 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/csrf-token?client=4d46b81d-0675-4a4a-a8f4-12ee10bad4b8 "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:13:45,923 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/flows/ "HTTP/1.1 200 OK"
+2026-01-27 19:13:46,494 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/flow_runs/ "HTTP/1.1 201 Created"
+2026-01-27 19:13:46,837 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/flow_runs/6783f8e5-eb17-4771-8139-527b1586b54b/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:13:46,994 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/flow_runs/6783f8e5-eb17-4771-8139-527b1586b54b "HTTP/1.1 200 OK"
+2026-01-27 19:13:46,998 - INFO - Beginning flow run 'dark-cassowary' for flow 'RecoMart_End_to_End_Pipeline'
+2026-01-27 19:13:47,996 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p002_synthetic_data.generate_interactions
+2026-01-27 19:13:49,429 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/flows/f09b52af-1b35-463b-85e5-b1a4cc1c0f31 "HTTP/1.1 200 OK"
+2026-01-27 19:13:50,014 - INFO - HTTP Request: GET http://127.0.0.1:8054/api/csrf-token?client=f065f9ae-1c94-40c2-a9d3-6bb231cbddbc "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:13:50,081 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:13:51,211 - INFO - [p002_synthetic_data.generate_interactions] STDOUT:
+Generated synthetic interaction file: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p002_synthetic_data\output\interactions_20260127_191350.csv
+Total rows: 20010
+
+2026-01-27 19:13:51,211 - INFO - Module p002_synthetic_data.generate_interactions completed successfully
+2026-01-27 19:13:51,217 - INFO - Finished in state Completed()
+2026-01-27 19:13:51,609 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p003_ingestion.ingest_interactions
+2026-01-27 19:13:52,041 - INFO - [p003_ingestion.ingest_interactions] STDOUT:
+SUCCESS: Ingested interactions_20260127_191350.csv to data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_191350.csv
+
+2026-01-27 19:13:52,043 - INFO - Module p003_ingestion.ingest_interactions completed successfully
+2026-01-27 19:13:52,057 - INFO - Finished in state Completed()
+2026-01-27 19:13:52,079 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p003_ingestion.ingest_products_api
+2026-01-27 19:13:52,167 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:13:53,287 - INFO - [p003_ingestion.ingest_products_api] STDOUT:
+
+=== PRODUCT API INGESTION STARTED ===
+Calling Product API: http://127.0.0.1:8000/products
+Fetched 200 product records from API
+SUCCESS: Ingested product data to data_lake/raw/products/api\2026\01\27\products_20260127_191353.json (records: 200)
+=== PRODUCT API INGESTION COMPLETED ===
+
+
+2026-01-27 19:13:53,289 - INFO - Module p003_ingestion.ingest_products_api completed successfully
+2026-01-27 19:13:53,293 - INFO - Finished in state Completed()
+2026-01-27 19:13:53,307 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p004_validation.profile_and_validate_interactions
+2026-01-27 19:13:54,258 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:13:55,901 - INFO - [p004_validation.profile_and_validate_interactions] STDOUT:
+
+Using latest raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_191350.csv
+
+--- DATA PROFILING (INTERACTIONS) ---
+Shape (rows, columns): (20010, 7)
+
+Null values per column:
+user_id           0
+item_id           0
+event_type        0
+rating        15124
+timestamp         0
+device            0
+session_id        0
+dtype: int64
+
+Unique users: 500
+Unique items: 200
+
+Event type distribution:
+event_type
+rating      5030
+purchase    5028
+view        4981
+click       4971
+Name: count, dtype: int64
+
+--- DATA VALIDATION (INTERACTIONS) ---
+invalid_ratings: 325
+invalid_events: 0
+missing_user_or_item: 0
+duplicate_rows: 10
+
+Data Quality Report saved at: p005_data_quality_reports/interactions\dq_report_20260127_191355.json
+
+Validation completed and report generated.
+
+2026-01-27 19:13:55,903 - INFO - Module p004_validation.profile_and_validate_interactions completed successfully
+2026-01-27 19:13:55,907 - INFO - Finished in state Completed()
+2026-01-27 19:13:55,933 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p004_validation.profile_and_validate_products
+2026-01-27 19:13:56,307 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:13:56,359 - INFO - [p004_validation.profile_and_validate_products] STDOUT:
+
+Using latest raw product file: data_lake/raw/products/api\2026\01\27\products_20260127_191353.json
+
+--- DATA PROFILING (PRODUCTS) ---
+Total records: 200
+Unique categories: {'Home', 'Clothing', 'Sports', 'Books', 'Electronics'}
+Unique brands: {'BrandC', 'BrandD', 'BrandA', 'BrandB'}
+Price range: 109.81 to 4978.99
+Rating Avg range: 1.0 to 4.97
+Popularity score range: 0.01 to 0.98
+
+--- DATA VALIDATION (PRODUCTS) ---
+missing_item_id: 0
+missing_name: 0
+missing_category: 0
+invalid_price: 0
+invalid_rating_avg: 0
+invalid_popularity_score: 0
+
+Product Data Quality Report saved at: p005_data_quality_reports/products\dq_report_20260127_191356.json
+
+Product validation completed and report generated.
+
+2026-01-27 19:13:56,363 - INFO - Module p004_validation.profile_and_validate_products completed successfully
+2026-01-27 19:13:56,370 - INFO - Finished in state Completed()
+2026-01-27 19:13:56,388 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p005_data_quality_reports.generate_dq_pdf
+2026-01-27 19:13:57,612 - INFO - [p005_data_quality_reports.generate_dq_pdf] STDOUT:
+Generating Data Quality PDF Report...
+Data Quality PDF generated successfully:
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p005_data_quality_reports\DQ_Report_20260127_191357.pdf
+
+2026-01-27 19:13:57,612 - INFO - Module p005_data_quality_reports.generate_dq_pdf completed successfully
+2026-01-27 19:13:57,620 - INFO - Finished in state Completed()
+2026-01-27 19:13:57,630 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p006_preparation.prepare_interactions
+2026-01-27 19:13:58,383 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:14:00,589 - INFO - [p006_preparation.prepare_interactions] STDOUT:
+
+=== INTERACTIONS DATA PREPARATION PIPELINE STARTED ===
+Using raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_191350.csv
+
+================ DATA PREPARATION : INTERACTIONS =================
+Initial shape: (20010, 7)
+Step 1: Removing duplicate records
+Duplicates removed: 10
+Step 2: Handling missing ratings (only rating events must have rating)
+Invalid rating records removed: 144
+Step 3: Validating rating range (1 to 5)
+Invalid rating values removed: 325
+Step 4: Converting timestamp to datetime format
+Final shape after cleaning: (19531, 7)
+================ DATA PREPARATION COMPLETED =================
+
+Prepared interactions file saved at: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_191400.csv
+Lineage logged for stage: prepare_interactions
+
+=== INTERACTIONS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:14:00,591 - INFO - Module p006_preparation.prepare_interactions completed successfully
+2026-01-27 19:14:00,599 - INFO - Finished in state Completed()
+2026-01-27 19:14:00,613 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p006_preparation.prepare_products
+2026-01-27 19:14:00,995 - INFO - [p006_preparation.prepare_products] STDOUT:
+
+=== PRODUCTS DATA PREPARATION PIPELINE STARTED ===
+Using latest raw file: data_lake/raw/products/api\2026\01\27\products_20260127_191353.json
+
+================ DATA PREPARATION : PRODUCTS =================
+Initial number of records: 200
+Invalid product records dropped: 0
+Final number of clean product records: 200
+================ DATA PREPARATION COMPLETED =================
+
+Prepared product dataset saved at: data_lake/prepared/products\2026\01\27\products_prepared_20260127_191400.json
+Lineage logged for stage: prepare_products
+
+=== PRODUCTS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:14:00,995 - INFO - Module p006_preparation.prepare_products completed successfully
+2026-01-27 19:14:01,001 - INFO - Finished in state Completed()
+2026-01-27 19:14:01,011 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p008_feature_engineering.build_features
+2026-01-27 19:14:02,449 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:14:08,567 - INFO - [p008_feature_engineering.build_features] STDOUT:
+
+=== FEATURE ENGINEERING PIPELINE STARTED ===
+Using prepared interactions: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_191400.csv
+Using prepared products: data_lake/prepared/products\2026\01\27\products_prepared_20260127_191400.json
+
+================ FEATURE ENGINEERING STARTED ================
+Step 1: Joining interactions with product metadata (on item_id)
+Total records after join: 19531
+
+Step 2: Creating User Activity Frequency feature
+
+Step 3: Creating Average Rating Per User feature
+
+Step 4: Creating Average Rating Per Item feature
+
+Step 5: Creating Session Co-occurrence feature
+
+Step 6: Creating Session Interaction Count feature
+
+Step 7: Creating Price Bucket feature
+
+Step 8: Creating Is-Rating-Event feature
+
+Step 9: Creating Normalized Popularity Score feature
+
+Step 10: Encoding categorical features
+
+Step 11: Normalizing numerical features
+
+================ FEATURE ENGINEERING COMPLETED ================
+
+Feature store dataset saved at: p009_feature_store/data\features_20260127_191406.csv
+Lineage logged for stage: build_features
+
+=== FEATURE ENGINEERING PIPELINE COMPLETED ===
+
+2026-01-27 19:14:08,567 - INFO - Module p008_feature_engineering.build_features completed successfully
+2026-01-27 19:14:08,574 - INFO - Finished in state Completed()
+2026-01-27 19:14:08,588 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p008_feature_engineering.load_features_to_db
+2026-01-27 19:14:10,606 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:14:31,384 - INFO - [p008_feature_engineering.load_features_to_db] STDOUT:
+
+=== LOADING FEATURE STORE DATA INTO DATABASE ===
+Latest feature store file detected: p009_feature_store/data\features_20260127_191406.csv
+
+Loading feature file into database: p009_feature_store/data\features_20260127_191406.csv
+Columns detected in CSV:
+['user_id', 'item_id', 'event_type', 'rating', 'timestamp', 'device', 'session_id', 'name', 'price', 'rating_avg', 'popularity_score', 'created_at', 'user_activity_frequency', 'avg_rating_per_user', 'avg_rating_per_item', 'session_unique_items', 'session_interaction_count', 'is_rating_event', 'popularity_score_norm', 'category_Books', 'category_Clothing', 'category_Electronics', 'category_Home', 'category_Sports', 'brand_BrandA', 'brand_BrandB', 'brand_BrandC', 'brand_BrandD', 'price_bucket_low', 'price_bucket_medium', 'price_bucket_high', 'price_bucket_premium', 'feature_created_at']
+Total rows to insert: 19531
+Table 'feature_store' checked/created successfully.
+500 rows inserted...
+1000 rows inserted...
+1500 rows inserted...
+2000 rows inserted...
+2500 rows inserted...
+3000 rows inserted...
+3500 rows inserted...
+4000 rows inserted...
+4500 rows inserted...
+5000 rows inserted...
+5500 rows inserted...
+6000 rows inserted...
+6500 rows inserted...
+7000 rows inserted...
+7500 rows inserted...
+8000 rows inserted...
+8500 rows inserted...
+9000 rows inserted...
+9500 rows inserted...
+10000 rows inserted...
+10500 rows inserted...
+11000 rows inserted...
+11500 rows inserted...
+12000 rows inserted...
+12500 rows inserted...
+13000 rows inserted...
+13500 rows inserted...
+14000 rows inserted...
+14500 rows inserted...
+15000 rows inserted...
+15500 rows inserted...
+16000 rows inserted...
+16500 rows inserted...
+17000 rows inserted...
+17500 rows inserted...
+18000 rows inserted...
+18500 rows inserted...
+19000 rows inserted...
+19500 rows inserted...
+
+Feature store updated successfully.
+Total rows inserted: 19531
+Lineage logged for stage: load_features_to_db
+
+=== FEATURE STORE LOAD COMPLETED ===
+
+2026-01-27 19:14:31,384 - INFO - Module p008_feature_engineering.load_features_to_db completed successfully
+2026-01-27 19:14:31,391 - INFO - Finished in state Completed()
+2026-01-27 19:14:31,401 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p011_model_training.train_model
+2026-01-27 19:14:32,831 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:15:01,891 - INFO - [p011_model_training.train_model] STDOUT:
+
+=== MODEL TRAINING PIPELINE STARTED ===
+
+Using feature file: p009_feature_store/data\features_20260127_191406.csv
+
+Checking missing values in feature columns:
+user_activity_frequency      0
+avg_rating_per_user          0
+avg_rating_per_item          0
+session_unique_items         0
+session_interaction_count    0
+is_rating_event              0
+popularity_score_norm        0
+dtype: int64
+
+Handling missing values: filling NaNs with 0
+
+Model Performance:
+Accuracy : 0.744305093422063
+Precision: 0.0
+Recall   : 0.0
+
+MLflow Run ID: 64be64b5b7cd434fa1143096450837fb
+Lineage logged for stage: model_training
+
+=== MODEL TRAINING PIPELINE COMPLETED ===
+
+2026-01-27 19:15:01,895 - ERROR - [p011_model_training.train_model] STDERR:
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:14:41 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:14:41 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:14:41 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:14:41 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:14:41 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:14:42 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:14:42 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+2026/01/27 19:14:43 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+
+2026-01-27 19:15:01,899 - INFO - Module p011_model_training.train_model completed successfully
+2026-01-27 19:15:01,907 - INFO - Finished in state Completed()
+2026-01-27 19:15:01,933 - INFO - Running: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Scripts\python.exe -m p011_model_training.train_svd_model
+2026-01-27 19:15:03,081 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:15:13,089 - INFO - [p011_model_training.train_svd_model] STDOUT:
+Locating latest interaction data...
+Using interaction data from: data_lake\prepared\interactions\2026\01\27\interactions_prepared_20260127_191400.csv
+Loading interaction data...
+Raw data preview:
+  user_id item_id event_type  ...                   timestamp  device session_id
+0   U0111   P0187     rating  ...  2026-01-27 14:23:19.398375  mobile      S5424
+1   U0167   P0026     rating  ...  2026-01-27 06:58:47.398375  mobile      S1556
+2   U0277   P0164      click  ...  2026-01-27 00:31:48.398375     web      S1190
+3   U0431   P0166     rating  ...  2026-01-27 06:34:54.398375  mobile      S1867
+4   U0320   P0004       view  ...  2026-01-27 02:06:56.398375  mobile      S4887
+
+[5 rows x 7 columns]
+Total training rows after cleaning: 4559
+Training SVD model...
+Evaluating model...
+RMSE: 1.4427
+Precision@5: 0.1748
+Recall@5: 0.6191
+
+SVD model training completed successfully.
+RMSE: 1.4426583362879966
+Precision@5: 0.1747663551401877
+Recall@5: 0.6190809968847353
+Model artifact and metrics logged in MLflow.
+PDF report generated at: reports\model_report_SVD_Run_20260127_191511.pdf
+Each MLflow run = one model version.
+
+2026-01-27 19:15:13,091 - ERROR - [p011_model_training.train_svd_model] STDERR:
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:15:10 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:15:11 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:15:11 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:15:11 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:15:11 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:15:11 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:15:11 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+
+2026-01-27 19:15:13,103 - INFO - Module p011_model_training.train_svd_model completed successfully
+2026-01-27 19:15:13,109 - INFO - Finished in state Completed()
+2026-01-27 19:15:13,497 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/flow_runs/6783f8e5-eb17-4771-8139-527b1586b54b/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:15:13,501 - INFO - Finished in state Completed()
+2026-01-27 19:15:13,566 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:15:13,700 - INFO - HTTP Request: POST http://127.0.0.1:8054/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:15:13,706 - INFO - Stopping temporary server on http://127.0.0.1:8054
+2026-01-27 19:41:20,676 - INFO - Orchestration logging initialized
+2026-01-27 19:41:26,664 - INFO - Starting temporary server on http://127.0.0.1:8704
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2026-01-27 19:41:41,122 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/health "HTTP/1.1 200 OK"
+2026-01-27 19:41:42,698 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/admin/version "HTTP/1.1 200 OK"
+2026-01-27 19:41:42,739 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/csrf-token?client=f769455b-f95e-4efe-9bc7-b0afa33da2b2 "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:41:43,055 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/flows/ "HTTP/1.1 200 OK"
+2026-01-27 19:41:43,494 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/flow_runs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:43,765 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/flow_runs/32677e82-a932-4f93-a6e0-a886d108edef/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:41:43,887 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/flow_runs/32677e82-a932-4f93-a6e0-a886d108edef "HTTP/1.1 200 OK"
+2026-01-27 19:41:43,890 - INFO - Beginning flow run 'imported-aardwark' for flow 'RecoMart_End_to_End_Pipeline'
+2026-01-27 19:41:44,886 - INFO - Running module: p002_synthetic_data.generate_interactions
+2026-01-27 19:41:46,413 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/flows/f09b52af-1b35-463b-85e5-b1a4cc1c0f31 "HTTP/1.1 200 OK"
+2026-01-27 19:41:46,913 - INFO - HTTP Request: GET http://127.0.0.1:8704/api/csrf-token?client=e1b1db81-b305-4181-8fd4-fcc386a08cd2 "HTTP/1.1 422 Unprocessable Entity"
+2026-01-27 19:41:47,039 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:48,267 - INFO - [p002_synthetic_data.generate_interactions] STDOUT:
+Generated synthetic interaction file: C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p002_synthetic_data\output\interactions_20260127_194147.csv
+Total rows: 20010
+
+2026-01-27 19:41:48,270 - INFO - Module p002_synthetic_data.generate_interactions completed successfully
+2026-01-27 19:41:48,278 - INFO - Finished in state Completed()
+2026-01-27 19:41:48,296 - INFO - Running module: p003_ingestion.ingest_interactions
+2026-01-27 19:41:48,710 - INFO - [p003_ingestion.ingest_interactions] STDOUT:
+SUCCESS: Ingested interactions_20260127_194147.csv to data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_194147.csv
+
+2026-01-27 19:41:48,712 - INFO - Module p003_ingestion.ingest_interactions completed successfully
+2026-01-27 19:41:48,715 - INFO - Finished in state Completed()
+2026-01-27 19:41:48,736 - INFO - Running module: p003_ingestion.ingest_products_api
+2026-01-27 19:41:49,153 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:49,737 - INFO - [p003_ingestion.ingest_products_api] STDOUT:
+
+=== PRODUCT API INGESTION STARTED ===
+Calling Product API: http://127.0.0.1:8000/products
+Fetched 200 product records from API
+SUCCESS: Ingested product data to data_lake/raw/products/api\2026\01\27\products_20260127_194149.json (records: 200)
+=== PRODUCT API INGESTION COMPLETED ===
+
+
+2026-01-27 19:41:49,753 - INFO - Module p003_ingestion.ingest_products_api completed successfully
+2026-01-27 19:41:49,765 - INFO - Finished in state Completed()
+2026-01-27 19:41:49,787 - INFO - Running module: p004_validation.profile_and_validate_interactions
+2026-01-27 19:41:51,329 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:52,526 - INFO - [p004_validation.profile_and_validate_interactions] STDOUT:
+
+Using latest raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_194147.csv
+
+--- DATA PROFILING (INTERACTIONS) ---
+Shape (rows, columns): (20010, 7)
+
+Null values per column:
+user_id           0
+item_id           0
+event_type        0
+rating        15142
+timestamp         0
+device            0
+session_id        0
+dtype: int64
+
+Unique users: 500
+Unique items: 200
+
+Event type distribution:
+event_type
+rating      5029
+purchase    5020
+click       5001
+view        4960
+Name: count, dtype: int64
+
+--- DATA VALIDATION (INTERACTIONS) ---
+invalid_ratings: 347
+invalid_events: 0
+missing_user_or_item: 0
+duplicate_rows: 10
+
+Data Quality Report saved at: p005_data_quality_reports/interactions\dq_report_20260127_194152.json
+
+Validation completed and report generated.
+
+2026-01-27 19:41:52,528 - INFO - Module p004_validation.profile_and_validate_interactions completed successfully
+2026-01-27 19:41:52,544 - INFO - Finished in state Completed()
+2026-01-27 19:41:52,578 - INFO - Running module: p004_validation.profile_and_validate_products
+2026-01-27 19:41:52,955 - INFO - [p004_validation.profile_and_validate_products] STDOUT:
+
+Using latest raw product file: data_lake/raw/products/api\2026\01\27\products_20260127_194149.json
+
+--- DATA PROFILING (PRODUCTS) ---
+Total records: 200
+Unique categories: {'Home', 'Clothing', 'Sports', 'Books', 'Electronics'}
+Unique brands: {'BrandB', 'BrandD', 'BrandC', 'BrandA'}
+Price range: 133.97 to 4996.91
+Rating Avg range: 1.01 to 4.97
+Popularity score range: 0.02 to 1.0
+
+--- DATA VALIDATION (PRODUCTS) ---
+missing_item_id: 0
+missing_name: 0
+missing_category: 0
+invalid_price: 0
+invalid_rating_avg: 0
+invalid_popularity_score: 0
+
+Product Data Quality Report saved at: p005_data_quality_reports/products\dq_report_20260127_194152.json
+
+Product validation completed and report generated.
+
+2026-01-27 19:41:52,957 - INFO - Module p004_validation.profile_and_validate_products completed successfully
+2026-01-27 19:41:52,968 - INFO - Finished in state Completed()
+2026-01-27 19:41:52,988 - INFO - Running module: p005_data_quality_reports.generate_dq_pdf
+2026-01-27 19:41:53,413 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:54,229 - INFO - [p005_data_quality_reports.generate_dq_pdf] STDOUT:
+Generating Data Quality PDF Report...
+Data Quality PDF generated successfully:
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\p005_data_quality_reports\DQ_Report_20260127_194153.pdf
+
+2026-01-27 19:41:54,229 - INFO - Module p005_data_quality_reports.generate_dq_pdf completed successfully
+2026-01-27 19:41:54,235 - INFO - Finished in state Completed()
+2026-01-27 19:41:54,253 - INFO - Running module: p006_preparation.prepare_interactions
+2026-01-27 19:41:55,487 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:41:56,871 - INFO - [p006_preparation.prepare_interactions] STDOUT:
+
+=== INTERACTIONS DATA PREPARATION PIPELINE STARTED ===
+Using raw file: data_lake/raw/interactions/csv\2026\01\27\interactions_20260127_194147.csv
+
+================ DATA PREPARATION : INTERACTIONS =================
+Initial shape: (20010, 7)
+Step 1: Removing duplicate records
+Duplicates removed: 10
+Step 2: Handling missing ratings (only rating events must have rating)
+Invalid rating records removed: 161
+Step 3: Validating rating range (1 to 5)
+Invalid rating values removed: 347
+Step 4: Converting timestamp to datetime format
+Final shape after cleaning: (19492, 7)
+================ DATA PREPARATION COMPLETED =================
+
+Prepared interactions file saved at: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_194156.csv
+Lineage logged for stage: prepare_interactions
+
+=== INTERACTIONS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:41:56,873 - INFO - Module p006_preparation.prepare_interactions completed successfully
+2026-01-27 19:41:56,875 - INFO - Finished in state Completed()
+2026-01-27 19:41:56,905 - INFO - Running module: p006_preparation.prepare_products
+2026-01-27 19:41:57,203 - INFO - [p006_preparation.prepare_products] STDOUT:
+
+=== PRODUCTS DATA PREPARATION PIPELINE STARTED ===
+Using latest raw file: data_lake/raw/products/api\2026\01\27\products_20260127_194149.json
+
+================ DATA PREPARATION : PRODUCTS =================
+Initial number of records: 200
+Invalid product records dropped: 0
+Final number of clean product records: 200
+================ DATA PREPARATION COMPLETED =================
+
+Prepared product dataset saved at: data_lake/prepared/products\2026\01\27\products_prepared_20260127_194157.json
+Lineage logged for stage: prepare_products
+
+=== PRODUCTS DATA PREPARATION PIPELINE COMPLETED ===
+
+2026-01-27 19:41:57,205 - INFO - Module p006_preparation.prepare_products completed successfully
+2026-01-27 19:41:57,207 - INFO - Finished in state Completed()
+2026-01-27 19:41:57,228 - INFO - Running module: p008_feature_engineering.build_features
+2026-01-27 19:41:57,650 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:42:05,269 - INFO - [p008_feature_engineering.build_features] STDOUT:
+
+=== FEATURE ENGINEERING PIPELINE STARTED ===
+Using prepared interactions: data_lake/prepared/interactions\2026\01\27\interactions_prepared_20260127_194156.csv
+Using prepared products: data_lake/prepared/products\2026\01\27\products_prepared_20260127_194157.json
+
+================ FEATURE ENGINEERING STARTED ================
+Step 1: Joining interactions with product metadata (on item_id)
+Total records after join: 19492
+
+Step 2: Creating User Activity Frequency feature
+
+Step 3: Creating Average Rating Per User feature
+
+Step 4: Creating Average Rating Per Item feature
+
+Step 5: Creating Session Co-occurrence feature
+
+Step 6: Creating Session Interaction Count feature
+
+Step 7: Creating Price Bucket feature
+
+Step 8: Creating Is-Rating-Event feature
+
+Step 9: Creating Normalized Popularity Score feature
+
+Step 10: Encoding categorical features
+
+Step 11: Normalizing numerical features
+
+================ FEATURE ENGINEERING COMPLETED ================
+
+Feature store dataset saved at: p009_feature_store/data\features_20260127_194203.csv
+Lineage logged for stage: build_features
+
+=== FEATURE ENGINEERING PIPELINE COMPLETED ===
+
+2026-01-27 19:42:05,271 - INFO - Module p008_feature_engineering.build_features completed successfully
+2026-01-27 19:42:05,277 - INFO - Finished in state Completed()
+2026-01-27 19:42:05,318 - INFO - Running module: p008_feature_engineering.load_features_to_db
+2026-01-27 19:42:05,808 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:42:28,805 - INFO - [p008_feature_engineering.load_features_to_db] STDOUT:
+
+=== LOADING FEATURE STORE DATA INTO DATABASE ===
+Latest feature store file detected: p009_feature_store/data\features_20260127_194203.csv
+
+Loading feature file into database: p009_feature_store/data\features_20260127_194203.csv
+Columns detected in CSV:
+['user_id', 'item_id', 'event_type', 'rating', 'timestamp', 'device', 'session_id', 'name', 'price', 'rating_avg', 'popularity_score', 'created_at', 'user_activity_frequency', 'avg_rating_per_user', 'avg_rating_per_item', 'session_unique_items', 'session_interaction_count', 'is_rating_event', 'popularity_score_norm', 'category_Books', 'category_Clothing', 'category_Electronics', 'category_Home', 'category_Sports', 'brand_BrandA', 'brand_BrandB', 'brand_BrandC', 'brand_BrandD', 'price_bucket_low', 'price_bucket_medium', 'price_bucket_high', 'price_bucket_premium', 'feature_created_at']
+Total rows to insert: 19492
+Table 'feature_store' checked/created successfully.
+500 rows inserted...
+1000 rows inserted...
+1500 rows inserted...
+2000 rows inserted...
+2500 rows inserted...
+3000 rows inserted...
+3500 rows inserted...
+4000 rows inserted...
+4500 rows inserted...
+5000 rows inserted...
+5500 rows inserted...
+6000 rows inserted...
+6500 rows inserted...
+7000 rows inserted...
+7500 rows inserted...
+8000 rows inserted...
+8500 rows inserted...
+9000 rows inserted...
+9500 rows inserted...
+10000 rows inserted...
+10500 rows inserted...
+11000 rows inserted...
+11500 rows inserted...
+12000 rows inserted...
+12500 rows inserted...
+13000 rows inserted...
+13500 rows inserted...
+14000 rows inserted...
+14500 rows inserted...
+15000 rows inserted...
+15500 rows inserted...
+16000 rows inserted...
+16500 rows inserted...
+17000 rows inserted...
+17500 rows inserted...
+18000 rows inserted...
+18500 rows inserted...
+19000 rows inserted...
+
+Feature store updated successfully.
+Total rows inserted: 19492
+Lineage logged for stage: load_features_to_db
+
+=== FEATURE STORE LOAD COMPLETED ===
+
+2026-01-27 19:42:28,805 - INFO - Module p008_feature_engineering.load_features_to_db completed successfully
+2026-01-27 19:42:28,824 - INFO - Finished in state Completed()
+2026-01-27 19:42:28,832 - INFO - Running module: p011_model_training.train_model
+2026-01-27 19:42:29,997 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:43:06,075 - INFO - [p011_model_training.train_model] STDOUT:
+
+=== MODEL TRAINING PIPELINE STARTED ===
+
+Using feature file: p009_feature_store/data\features_20260127_194203.csv
+
+Checking missing values in feature columns:
+user_activity_frequency      0
+avg_rating_per_user          0
+avg_rating_per_item          0
+session_unique_items         0
+session_interaction_count    0
+is_rating_event              0
+popularity_score_norm        0
+dtype: int64
+
+Handling missing values: filling NaNs with 0
+
+Model Performance:
+Accuracy : 0.7478840728391896
+Precision: 0.0
+Recall   : 0.0
+
+MLflow Run ID: 18c113e011de4c92acf7b512a90ffbbf
+Lineage logged for stage: model_training
+
+=== MODEL TRAINING PIPELINE COMPLETED ===
+
+2026-01-27 19:43:06,075 - ERROR - [p011_model_training.train_model] STDERR:
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:42:39 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:42:40 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:42:40 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:42:40 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:42:40 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:42:40 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:42:40 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+C:\Users\Sharath BITS Pilani\Documents\Semester 2\DMML\G112_DMML\venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+2026/01/27 19:42:41 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+
+2026-01-27 19:43:06,083 - INFO - Module p011_model_training.train_model completed successfully
+2026-01-27 19:43:06,095 - INFO - Finished in state Completed()
+2026-01-27 19:43:06,118 - INFO - Running module: p011_model_training.train_svd_model
+2026-01-27 19:43:06,319 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:43:16,070 - INFO - [p011_model_training.train_svd_model] STDOUT:
+Locating latest interaction data...
+Using interaction data from: data_lake\prepared\interactions\2026\01\27\interactions_prepared_20260127_194156.csv
+Loading interaction data...
+Raw data preview:
+  user_id item_id event_type  ...                   timestamp  device session_id
+0   U0284   P0179     rating  ...  2026-01-27 19:28:26.488171  mobile      S1445
+1   U0346   P0106      click  ...  2026-01-27 13:07:30.488171  mobile      S5760
+2   U0331   P0189     rating  ...  2026-01-27 17:01:04.488171     web      S6975
+3   U0271   P0077   purchase  ...  2026-01-26 22:58:49.488171     web      S5026
+4   U0393   P0090     rating  ...  2026-01-27 09:17:00.488171  mobile      S9783
+
+[5 rows x 7 columns]
+Total training rows after cleaning: 4519
+Training SVD model...
+Evaluating model...
+RMSE: 1.4259
+Precision@5: 0.1751
+Recall@5: 0.6239
+
+SVD model training completed successfully.
+RMSE: 1.4259419857315656
+Precision@5: 0.1750611246943772
+Recall@5: 0.623879380603097
+Model artifact and metrics logged in MLflow.
+PDF report generated at: reports\model_report_SVD_Run_20260127_194314.pdf
+Each MLflow run = one model version.
+
+2026-01-27 19:43:16,071 - ERROR - [p011_model_training.train_svd_model] STDERR:
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/01/27 19:43:13 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/01/27 19:43:14 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/01/27 19:43:14 INFO mlflow.store.db.utils: Updating database tables
+2026/01/27 19:43:14 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:43:14 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/01/27 19:43:14 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/01/27 19:43:14 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+
+2026-01-27 19:43:16,073 - INFO - Module p011_model_training.train_svd_model completed successfully
+2026-01-27 19:43:16,079 - INFO - Finished in state Completed()
+2026-01-27 19:43:16,577 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/flow_runs/32677e82-a932-4f93-a6e0-a886d108edef/set_state "HTTP/1.1 201 Created"
+2026-01-27 19:43:16,579 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:43:16,601 - INFO - Finished in state Completed()
+2026-01-27 19:43:16,706 - INFO - HTTP Request: POST http://127.0.0.1:8704/api/logs/ "HTTP/1.1 201 Created"
+2026-01-27 19:43:16,716 - INFO - Stopping temporary server on http://127.0.0.1:8704
