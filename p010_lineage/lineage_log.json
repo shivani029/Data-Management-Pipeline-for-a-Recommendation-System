@@ -1,0 +1,146 @@
+[
+    {
+        "timestamp": "2026-01-25 01:52:18",
+        "stage": "prepare_interactions",
+        "input_files": [
+            "data_lake/raw/interactions/csv\\2026\\01\\20\\interactions_20260120_003938.csv"
+        ],
+        "output_files": [
+            "data_lake/prepared/interactions\\2026\\01\\25\\interactions_prepared_20260125_015218.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-25 01:57:02",
+        "stage": "prepare_products",
+        "input_files": [
+            "data_lake/raw/products/api\\2026\\01\\20\\products_20260120_021032.json"
+        ],
+        "output_files": [
+            "data_lake/prepared/products\\2026\\01\\25\\products_prepared_20260125_015702.json"
+        ]
+    },
+    {
+        "timestamp": "2026-01-25 01:58:05",
+        "stage": "build_features",
+        "input_files": [
+            "data_lake/prepared/interactions\\2026\\01\\25\\interactions_prepared_20260125_015218.csv",
+            "data_lake/prepared/products\\2026\\01\\25\\products_prepared_20260125_015702.json"
+        ],
+        "output_files": [
+            "feature_store/data\\features_20260125_015805.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-25 01:58:23",
+        "stage": "load_features_to_db",
+        "input_files": [
+            "feature_store/data\\features_20260125_015805.csv"
+        ],
+        "output_files": [
+            "PostgreSQL: feature_store table"
+        ]
+    },
+    {
+        "timestamp": "2026-01-25 02:17:40",
+        "stage": "model_training",
+        "input_files": [
+            "feature_store/data\\features_20260125_015805.csv"
+        ],
+        "output_files": [
+            "MLflow model run_id=63a7c1172c5b4ca19d6faa7f8a576fbf"
+        ]
+    },
+    {
+        "timestamp": "2026-01-26 18:25:13",
+        "stage": "build_features",
+        "input_files": [
+            "data_lake/prepared/interactions\\2026\\01\\25\\interactions_prepared_20260125_015218.csv",
+            "data_lake/prepared/products\\2026\\01\\25\\products_prepared_20260125_015702.json"
+        ],
+        "output_files": [
+            "feature_store/data\\features_20260126_182513.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-26 21:50:13",
+        "stage": "build_features",
+        "input_files": [
+            "data_lake/prepared/interactions\\2026\\01\\25\\interactions_prepared_20260125_015218.csv",
+            "data_lake/prepared/products\\2026\\01\\25\\products_prepared_20260125_015702.json"
+        ],
+        "output_files": [
+            "feature_store/data\\features_20260126_215013.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-26 22:58:22",
+        "stage": "load_features_to_db",
+        "input_files": [
+            "feature_store/data\\features_20260126_215013.csv"
+        ],
+        "output_files": [
+            "PostgreSQL Table: feature_store"
+        ]
+    },
+    {
+        "timestamp": "2026-01-26 22:59:00",
+        "stage": "load_features_to_db",
+        "input_files": [
+            "feature_store/data\\features_20260126_215013.csv"
+        ],
+        "output_files": [
+            "PostgreSQL Table: feature_store"
+        ]
+    },
+    {
+        "timestamp": "2026-01-27 07:08:01",
+        "stage": "prepare_products",
+        "input_files": [
+            "data_lake/raw/products/api\\2026\\01\\27\\products_20260127_055214.json"
+        ],
+        "output_files": [
+            "data_lake/prepared/products\\2026\\01\\27\\products_prepared_20260127_070801.json"
+        ]
+    },
+    {
+        "timestamp": "2026-01-27 07:15:00",
+        "stage": "prepare_interactions",
+        "input_files": [
+            "data_lake/raw/interactions/csv\\2026\\01\\27\\interactions_20260127_052410.csv"
+        ],
+        "output_files": [
+            "data_lake/prepared/interactions\\2026\\01\\27\\interactions_prepared_20260127_071459.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-27 11:50:01",
+        "stage": "build_features",
+        "input_files": [
+            "data_lake/prepared/interactions\\2026\\01\\27\\interactions_prepared_20260127_071459.csv",
+            "data_lake/prepared/products\\2026\\01\\27\\products_prepared_20260127_070801.json"
+        ],
+        "output_files": [
+            "p009_feature_store/data\\features_20260127_115001.csv"
+        ]
+    },
+    {
+        "timestamp": "2026-01-27 11:56:32",
+        "stage": "load_features_to_db",
+        "input_files": [
+            "p009_feature_store/data\\features_20260127_115001.csv"
+        ],
+        "output_files": [
+            "PostgreSQL Table: feature_store"
+        ]
+    },
+    {
+        "timestamp": "2026-01-27 12:16:54",
+        "stage": "model_training",
+        "input_files": [
+            "p009_feature_store/data\\features_20260127_115001.csv"
+        ],
+        "output_files": [
+            "MLflow model run_id=9b296c7fc43649dbacfed9267d0e1194"
+        ]
+    }
+]
